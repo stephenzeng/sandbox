@@ -1,0 +1,80 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>mwpayframe</title>
+</head>
+
+<style>
+    html, body {
+        padding: 0;
+        margin: 0;        
+    }
+    .button {
+        padding: 15px;
+        width: 100%;
+        max-width: 400px;
+        background-color: #FFD912;
+        border: 0;
+        font-weight: 600;
+    }
+    .outter {
+        margin: 20px; padding: 20px; border: 1px solid #e0e0e0;
+        max-width: 450px;
+    }
+</style>
+
+<body>    
+    <div class="outter">
+        <div id="cardData"></div>
+        <button class="button" id="submitButton" onclick='submitFrame()'>Confirm Payment</button>
+    </div>
+    
+    <script type="text/javascript" src="https://secure.merchantwarrior.com/payframe/payframe.js"></script>
+    <script>
+        var method = 'getPayframeToken';
+        var style = {
+            backgroundColor: '#fff',
+            textColor: '#f963cd',
+            border: '1px solid #aaa',
+            fontSize: '14px',
+            width: '100%',            
+            cardTypeDisplay: 'none',
+            padding: '15px',
+            borderRadius: '0',
+            formLayout: 1
+        };
+        var uuid = '5c8b151c3da49';
+        var apiKey = 'mb9hdlmf';
+        var submitURL = 'https://base.merchantwarrior.com/payframe/';
+        var mwPayframe = new payframe(uuid, apiKey, 'cardData', 'https://securetest.merchantwarrior.com/payframe/', submitURL, style, method);
+        mwPayframe.mwCallback = function () {
+            processResponseEvent(method, arguments);
+        };
+
+        function processResponseEvent(method, arguments) {
+            var responseCode = mwPayframe.responseCode;
+            var responseMessage = mwPayframe.responseMessage;
+
+            console.log(responseCode, responseMessage);
+        }
+
+        function submitFrame() {
+            // Disable the button to stop double submissions
+            button.setAttribute('disabled', 'disabled');
+            button.innerHTML = "Please wait.."
+            button.style.opacity = '0.5';
+            button.filter = 'alpha(opacity=50)'; // IE8 fallback
+
+            mwPayframe.submitPayframe(this)
+
+        }
+
+        mwPayframe.deploy();
+    </script>
+
+</body>
+
+</html>
